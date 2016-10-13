@@ -1,4 +1,4 @@
- ```
+```
   % ./uniq
   Usage of ./uniq:
     -datadir string
@@ -10,3 +10,5 @@
     -port string
       	服务端口号 (default "6532")
 ```
+
+使用memcache协议访问,  set xxx/ get xxx
