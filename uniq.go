@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"time"
 	"io/ioutil"
+	"sync"
 	"log"
 )
 
@@ -68,14 +69,7 @@ func (u *Uniq)sync_worker(){
 	}
 }
 
-func (u *Uniq) Write(test []byte, days int) {
-	if days < u.maxdays {
-		u.filters[days].Add(test)
-		u.filters[days].is_synced = false
-	}
-}
-
-func (u *Uniq) Test(test []byte, days int) (ok bool) {
+func (u *Uniq) TestAndAdd(test []byte, days int) (ok bool) {
 	if days >= u.maxdays || days<=0{
 		days = u.maxdays-1
 	}
@@ -84,12 +78,19 @@ func (u *Uniq) Test(test []byte, days int) (ok bool) {
 			return true
 		}
 	}
+
+	u.filters[0].lk.Lock()
+	defer u.filters[0].lk.Unlock()
+
+	u.filters[0].Add(test)
+	u.filters[0].is_synced = false
 	return false
 }
 
 type filter struct {
 	*bloom.BloomFilter
 	path string
+	lk sync.Mutex
 	is_synced bool
 }
 

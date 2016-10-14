@@ -68,13 +68,8 @@ func handleRequest(conn net.Conn) {
 			return
 		}else{
 			cmd := strings.Split(string(line), " ")
-			if cmd[0] == "set"{
-				if len(cmd)>1 {
-					uniq.Write([]byte(cmd[1]), 0)
-				}
-				conn.Write([]byte("STORED\r\n"))
-			}else if cmd[0]=="get"{
-				if len(cmd)>1 && uniq.Test([]byte(cmd[1]), 0) {
+			if cmd[0]=="get"{
+				if len(cmd)>1 && uniq.TestAndAdd([]byte(cmd[1]), 0) {
 					conn.Write([]byte("VALUE "+cmd[1]+" 0 4\r\nTRUE\r\nEND\r\n"))
 				}else{
 					conn.Write([]byte("NOT_FOUND\r\n"))
