@@ -67,11 +67,11 @@ func handleRequest(conn net.Conn) {
 			return
 		} else {
 			cmd := strings.Split(string(line), " ")
-			if cmd[0] == "get" {
+			if cmd[0] == "get" || cmd[0] == "gets" {
 				if len(cmd) > 1 && uniq.TestAndAdd([]byte(cmd[1]), 0) {
 					conn.Write([]byte("VALUE " + cmd[1] + " 0 4\r\nTRUE\r\nEND\r\n"))
 				} else {
-					conn.Write([]byte("NOT_FOUND\r\n"))
+					conn.Write([]byte("END\r\n"))
 				}
 			}
 		}
