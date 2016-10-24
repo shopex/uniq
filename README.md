@@ -1,3 +1,12 @@
+采用bloomfilter实现大单量的去重. 对于电商场景, 一个单据的事件可能被发多次.
+
+安装
+```
+go get git.ishopex.cn/stat/uniq
+make
+```
+
+运行:
 ```
   % ./uniq
   Usage of ./uniq:
@@ -11,4 +20,4 @@
       	服务端口号 (default "6532")
 ```
 
-使用memcache协议访问,  set xxx/ get xxx
+使用memcache协议访问.   get指令检查某id是否存在,  第一次为空, 第二次的检查则会返回"true".
