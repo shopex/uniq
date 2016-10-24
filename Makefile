@@ -6,4 +6,4 @@ ${OBJ}: *.go
 	go build .
 
 start: ${OBJ}
-	./${OBJ} -datadir data -days 3 -port 6532 -number 100000
+	./${OBJ} -datadir data -days 30 -port 6532
